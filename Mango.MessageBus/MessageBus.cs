@@ -10,7 +10,7 @@ namespace Mango.MessageBus
 {
     public class MessageBus : IMessageBus
     {
-        private const string ConnectionString = "Endpoint=sb://micro-mango.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=k9Vl7SC3rjG7eNUPYb93zfJd5y7LrVFuH+ASbE4Bgcc=";
+        private const string ConnectionString = "This is my azure service-bus connection string.";
         public async Task PublishMessage(object message, string topic_queue_name)
         {
             try
