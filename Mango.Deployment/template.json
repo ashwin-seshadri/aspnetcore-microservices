@@ -1,0 +1,4341 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
+        },
+        "servers_micro_mango_name": {
+            "defaultValue": "micro-mango",
+            "type": "String"
+        },
+        "sites_MangoMicroWeb_name": {
+            "defaultValue": "MangoMicroWeb",
+            "type": "String"
+        },
+        "serverfarms_MangoWebPlan_name": {
+            "defaultValue": "MangoWebPlan",
+            "type": "String"
+        },
+        "namespaces_micro_mango_name": {
+            "defaultValue": "micro-mango",
+            "type": "String"
+        },
+        "sites_MangoMicroServiceGateway_name": {
+            "defaultValue": "MangoMicroServiceGateway",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesAuthAPI_name": {
+            "defaultValue": "MangoMicroServicesAuthAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesCartAPI_name": {
+            "defaultValue": "MangoMicroServicesCartAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesEmailAPI_name": {
+            "defaultValue": "MangoMicroServicesEmailAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesOrderAPI_name": {
+            "defaultValue": "MangoMicroServicesOrderAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesCouponAPI_name": {
+            "defaultValue": "MangoMicroServicesCouponAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesRewardAPI_name": {
+            "defaultValue": "MangoMicroServicesRewardAPI",
+            "type": "String"
+        },
+        "sites_MangoMicroServicesProductAPI_name": {
+            "defaultValue": "MangoMicroServicesProductAPI",
+            "type": "String"
+        },
+        "serverfarms_MangoServicesOrderAPIPlan_name": {
+            "defaultValue": "MangoServicesOrderAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServiceGatewayPlan_name": {
+            "defaultValue": "MangoMicroServiceGatewayPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesAuthAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesAuthAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesCartAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesCartAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesEmailAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesEmailAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesCouponAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesCouponAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesRewardAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesRewardAPIPlan",
+            "type": "String"
+        },
+        "serverfarms_MangoMicroServicesProductAPIPlan_name": {
+            "defaultValue": "MangoMicroServicesProductAPIPlan",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('namespaces_micro_mango_name')]",
+            "location": "westus2",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+            },
+            "properties": {
+                "premiumMessagingPartitions": 0,
+                "minimumTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "disableLocalAuth": false,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[parameters('servers_micro_mango_name')]",
+            "location": "westus2",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "sqladmin",
+                "version": "12.0",
+                "minimalTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServiceGatewayPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesAuthAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesCartAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesCouponAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesEmailAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesProductAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoMicroServicesRewardAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoServicesOrderAPIPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_MangoWebPlan_name')]",
+            "location": "West US 2",
+            "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
+            },
+            "kind": "app",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/authorizationrules",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/RootManageSharedAccessKey')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/networkrulesets",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/default')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "defaultAction": "Allow",
+                "virtualNetworkRules": [],
+                "ipRules": [],
+                "trustedServiceAccessEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/emailshoppingcart')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "lockDuration": "PT1M",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "enableBatchedOperations": true,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": 5,
+                "status": "Active",
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/registeruser')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "lockDuration": "PT1M",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "enableBatchedOperations": true,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": 5,
+                "status": "Active",
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/ordercreated')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": false,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/connectionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/default')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "connectionType": "Default"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Local",
+                "maintenanceConfigurationId": "/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/devOpsAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged",
+                "autoRotationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/ClientIp-2025-1-8_21-32-55')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "136.226.54.208",
+                "endIpAddress": "136.226.54.208"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/sqlVulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServiceGateway_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServiceGatewayPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServiceGatewayPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicegateway.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicegateway.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServiceGatewayPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesAuthAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesAuthAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesAuthAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicesauthapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicesauthapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesAuthAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesCartAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesCartAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCartAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicescartapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicescartapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesCartAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesCouponAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesCouponAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCouponAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicescouponapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicescouponapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesCouponAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesEmailAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesEmailAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesEmailAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicesemailapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicesemailapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesEmailAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": true,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesOrderAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoServicesOrderAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoServicesOrderAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicesorderapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicesorderapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoServicesOrderAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesProductAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesProductAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesProductAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicesproductapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicesproductapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesProductAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroServicesRewardAPI_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesRewardAPIPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesRewardAPIPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroservicesrewardapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroservicesrewardapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoMicroServicesRewardAPIPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": true,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_MangoMicroWeb_name')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoWebPlan_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoWebPlan": "empty"
+            },
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "mangomicroweb.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "mangomicroweb.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_MangoWebPlan_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "DD59F6DB1F6AA55E9915547DB7CB64B6573CF02A2F0FCDDF349B67EF4330E0CE",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServiceGateway_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServiceGateway_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServiceGatewayPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesAuthAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesAuthAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesAuthAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCartAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCartAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCartAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCouponAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCouponAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCouponAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesEmailAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesEmailAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesEmailAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesOrderAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesOrderAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoServicesOrderAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesProductAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesProductAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesProductAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesRewardAPI_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesRewardAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesRewardAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroWeb_name'), '/ftp')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroWeb_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoWebPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServiceGateway_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServiceGateway_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServiceGatewayPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesAuthAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesAuthAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesAuthAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCartAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCartAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCartAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCouponAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCouponAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCouponAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesEmailAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesEmailAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesEmailAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesOrderAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesOrderAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoServicesOrderAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesProductAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesProductAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesProductAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesRewardAPI_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesRewardAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesRewardAPIPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroWeb_name'), '/scm')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroWeb_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoWebPlan": "empty"
+            },
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServiceGateway_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServiceGateway_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServiceGatewayPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83172,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesAuthAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesAuthAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesAuthAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 82953,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCartAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCartAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCartAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83158,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCouponAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCouponAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesCouponAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83144,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesEmailAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesEmailAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesEmailAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2022",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83146,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesOrderAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesOrderAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoServicesOrderAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83148,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesProductAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesProductAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesProductAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83147,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesRewardAPI_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesRewardAPI_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoMicroServicesRewardAPIPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2022",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83157,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroWeb_name'), '/web')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroWeb_name'))]"
+            ],
+            "tags": {
+                "hidden-related:/subscriptions/ab131891-8e37-4010-912e-0d70483d64e3/resourceGroups/cor-dev-play/providers/Microsoft.Web/serverFarms/MangoWebPlan": "empty"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 83161,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServiceGateway_name'), '/', parameters('sites_MangoMicroServiceGateway_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServiceGateway_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServiceGateway",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesAuthAPI_name'), '/', parameters('sites_MangoMicroServicesAuthAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesAuthAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesAuthAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCartAPI_name'), '/', parameters('sites_MangoMicroServicesCartAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCartAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesCartAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCouponAPI_name'), '/', parameters('sites_MangoMicroServicesCouponAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCouponAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesCouponAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesEmailAPI_name'), '/', parameters('sites_MangoMicroServicesEmailAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesEmailAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesEmailAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesOrderAPI_name'), '/', parameters('sites_MangoMicroServicesOrderAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesOrderAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesOrderAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesProductAPI_name'), '/', parameters('sites_MangoMicroServicesProductAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesProductAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesProductAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesRewardAPI_name'), '/', parameters('sites_MangoMicroServicesRewardAPI_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesRewardAPI_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroServicesRewardAPI",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroWeb_name'), '/', parameters('sites_MangoMicroWeb_name'), '.azurewebsites.net')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroWeb_name'))]"
+            ],
+            "properties": {
+                "siteName": "MangoMicroWeb",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServiceGateway_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServiceGateway_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesAuthAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesAuthAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCartAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCartAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesCouponAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesCouponAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesEmailAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesEmailAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesOrderAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesOrderAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesProductAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesProductAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroServicesRewardAPI_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroServicesRewardAPI_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_MangoMicroWeb_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_MangoMicroWeb_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/ordercreated/OrderCreatedEmail')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('namespaces_micro_mango_name'), 'ordercreated')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT1M",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/ordercreated/OrderCreatedRewardsUpdate')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('namespaces_micro_mango_name'), 'ordercreated')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "isClientAffine": false,
+                "lockDuration": "PT1M",
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": false,
+                "deadLetteringOnFilterEvaluationExceptions": false,
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "enableBatchedOperations": true,
+                "autoDeleteOnIdle": "P14D"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "location": "West US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoAuthAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoAuthAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCartAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCartAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoCouponAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoCouponAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoEmailAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoEmailAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoOrderAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoOrderAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoProductAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoProductAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('servers_micro_mango_name'), '/MangoRewardAPI/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_micro_mango_name'), 'MangoRewardAPI')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_micro_mango_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/ordercreated/OrderCreatedEmail/$Default')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics/subscriptions', parameters('namespaces_micro_mango_name'), 'ordercreated', 'OrderCreatedEmail')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('namespaces_micro_mango_name'), 'ordercreated')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "action": {},
+                "filterType": "SqlFilter",
+                "sqlFilter": {
+                    "sqlExpression": "1=1",
+                    "compatibilityLevel": 20
+                }
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_micro_mango_name'), '/ordercreated/OrderCreatedRewardsUpdate/$Default')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics/subscriptions', parameters('namespaces_micro_mango_name'), 'ordercreated', 'OrderCreatedRewardsUpdate')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('namespaces_micro_mango_name'), 'ordercreated')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_micro_mango_name'))]"
+            ],
+            "properties": {
+                "action": {},
+                "filterType": "SqlFilter",
+                "sqlFilter": {
+                    "sqlExpression": "1=1",
+                    "compatibilityLevel": 20
+                }
+            }
+        }
+    ]
+}

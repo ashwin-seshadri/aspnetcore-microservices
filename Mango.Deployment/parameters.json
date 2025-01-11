@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "value": null
+        },
+        "servers_micro_mango_name": {
+            "value": null
+        },
+        "sites_MangoMicroWeb_name": {
+            "value": null
+        },
+        "serverfarms_MangoWebPlan_name": {
+            "value": null
+        },
+        "namespaces_micro_mango_name": {
+            "value": null
+        },
+        "sites_MangoMicroServiceGateway_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesAuthAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesCartAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesEmailAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesOrderAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesCouponAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesRewardAPI_name": {
+            "value": null
+        },
+        "sites_MangoMicroServicesProductAPI_name": {
+            "value": null
+        },
+        "serverfarms_MangoServicesOrderAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServiceGatewayPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesAuthAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesCartAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesEmailAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesCouponAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesRewardAPIPlan_name": {
+            "value": null
+        },
+        "serverfarms_MangoMicroServicesProductAPIPlan_name": {
+            "value": null
+        }
+    }
+}
